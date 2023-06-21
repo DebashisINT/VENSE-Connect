@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1020925355359",
+    "project_id": "vense-connect",
+    "storage_bucket": "vense-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020925355359:android:9bf788409afcdb3c45c2ea",
+        "android_client_info": {
+          "package_name": "com.breezefsmvenseconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1020925355359-msf3rakknm6fvtmbh1gm5gq2n5u4oh0g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVF_Y1v8PTmyic270FSV4kD-x_y3ambvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1020925355359-msf3rakknm6fvtmbh1gm5gq2n5u4oh0g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
