@@ -23,7 +23,7 @@ interface ProductListDao {
 
     ////nw code new
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,0.0 as Qty_per_Unit,0.0 as Scheme_Qty,0.0 as Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_rate) as PR\n" +
@@ -32,14 +32,14 @@ interface ProductListDao {
 
 
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,PR.Qty_per_Unit,PR.Scheme_Qty,PR.Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_online_rate_temp_table) as PR\n" +
             "on PL.id = PR.product_id ")
     fun getCustomizeProductListAllFromOnline(): List<CustomProductRate>
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,0.0 as Qty_per_Unit,0.0 as Scheme_Qty,0.0 as Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_rate) as PR\n" +
@@ -47,7 +47,7 @@ interface ProductListDao {
     fun getCustomizeProductListByBeandID(brand_id:String): List<CustomProductRate>
 
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,PR.Qty_per_Unit,PR.Scheme_Qty,PR.Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_online_rate_temp_table) as PR\n" +
@@ -55,7 +55,7 @@ interface ProductListDao {
     fun getCustomizeProductListByBeandIDFromOnlineRate(brand_id:String): List<CustomProductRate>
 
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,0.0 as Qty_per_Unit,0.0 as Scheme_Qty,0.0 as Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_rate) as PR\n" +
@@ -63,7 +63,7 @@ interface ProductListDao {
     fun getCustomizeProductListByBeandIDCategoryID(brand_id:String, category_id: String): List<CustomProductRate>
 
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,PR.Qty_per_Unit,PR.Scheme_Qty,PR.Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_online_rate_temp_table) as PR\n" +
@@ -71,7 +71,7 @@ interface ProductListDao {
     fun getCustomizeProductListByBeandIDCategoryIDFromOnlineRate(brand_id:String, category_id: String): List<CustomProductRate>
 
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate1 as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,0.0 as Qty_per_Unit,0.0 as Scheme_Qty,0.0 as Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_rate) as PR\n" +
@@ -79,7 +79,7 @@ interface ProductListDao {
     fun getCustomizeProductListByBeandIDCategoryIDWattID(brand_id:String, category_id: String,watt_id: String): List<CustomProductRate>
 
     @Query("select PL.id as product_id,PL.product_name,PL.brand_id,PL.brand,PL.category_id,PL.category,PL.watt_id,PL.watt,PL.product_mrp_show," +
-            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow from \n" +
+            "PL.product_discount_show,PR.rate as rate,PR.stock_amount,PR.stock_unit,PR.isStockShow,PR.isRateShow,PR.Qty_per_Unit,PR.Scheme_Qty,PR.Effective_Rate from \n" +
             "(select * from product_list) as PL\n" +
             "inner JOIN\n" +
             "(select * from product_online_rate_temp_table) as PR\n" +

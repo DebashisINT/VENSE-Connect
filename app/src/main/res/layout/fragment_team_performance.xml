@@ -85,7 +85,18 @@
                                     android:scaleType="fitCenter"
                                     android:background="@drawable/ic_round_share"
                                     android:layout_margin="@dimen/_2sdp"
+                                    android:visibility="gone"
                                     android:padding="@dimen/_5sdp"/>
+                                     <ImageView
+                                android:id="@+id/iv_frag_performance_atteninfo"
+                                         android:layout_width="@dimen/_22sdp"
+                                         android:layout_height="@dimen/_22sdp"
+                                         android:layout_gravity="center"
+                                         android:layout_margin="@dimen/_2sdp"
+                                         android:background="@drawable/info_icon"
+                                         android:scaleType="fitXY"
+                                         android:visibility="gone"
+                                 />
 
                            <!-- </androidx.cardview.widget.CardView>-->
 
@@ -134,7 +145,7 @@
                                     android:layout_height="@dimen/_35sdp"
                                     android:orientation="horizontal"
                                     android:gravity="center"
-                                    android:backgroundTint="#DEF8D0"
+                                    android:backgroundTint="#E9F8E1"
                                     android:background="@drawable/border_background_simple">
 
                                     <ImageView
@@ -177,7 +188,7 @@
                                     android:layout_height="@dimen/_35sdp"
                                     android:orientation="horizontal"
                                     android:gravity="center"
-                                    android:backgroundTint="#FBC2C2"
+                                    android:backgroundTint="#F8E4E4"
                                     android:background="@drawable/border_background_simple"
                                     android:layout_marginTop="@dimen/_10sdp">
 
@@ -304,6 +315,14 @@
                                     android:background="@drawable/ic_round_share"
                                     android:layout_margin="@dimen/_2sdp"
                                     android:padding="@dimen/_5sdp"/>
+                                   <ImageView
+                                android:id="@+id/iv_frag_performance_MTDinfo"
+                                       android:layout_width="@dimen/_22sdp"
+                                       android:layout_height="@dimen/_22sdp"
+                                       android:layout_gravity="center"
+                                       android:layout_margin="@dimen/_2sdp"
+                                       android:background="@drawable/info_icon"
+                                       android:scaleType="fitXY" />
 
                           <!--  </androidx.cardview.widget.CardView>-->
 
@@ -341,6 +360,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:layout_marginLeft="@dimen/_5sdp"
+                                android:backgroundTint="#CFF4E2"
                                 android:background="@drawable/shadow_selector_page">
 
                                 <TextView
@@ -351,7 +371,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text=""
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -363,6 +383,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:layout_marginLeft="@dimen/_5sdp"
+                                android:backgroundTint="#D0E9FA"
                                 android:background="@drawable/shadow_selector_page1">
 
                                 <TextView
@@ -373,7 +394,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text=""
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -393,6 +414,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:layout_marginLeft="@dimen/_5sdp"
+                                android:backgroundTint="#F6E3C6"
                                 android:background="@drawable/shadow_selector_page2">
 
                                 <TextView
@@ -403,7 +425,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text=""
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -415,7 +437,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:layout_marginLeft="@dimen/_5sdp"
-                                android:backgroundTint="#ef2f0a"
+                                android:backgroundTint="#F8E0DB"
                                 android:background="@drawable/shadow_selector_page3">
 
                                 <TextView
@@ -426,7 +448,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text=""
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -513,7 +535,14 @@
                                     android:background="@drawable/ic_round_share"
                                     android:padding="@dimen/_5sdp"
                                     android:scaleType="fitCenter" />
-
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_threemonthinfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
                            <!-- </androidx.cardview.widget.CardView>-->
                             <!-- end V 3.9.9  0026308 mantis new logo added  -->
 
@@ -630,6 +659,14 @@
                                     android:background="@drawable/ic_round_share"
                                     android:layout_margin="@dimen/_2sdp"
                                     android:padding="@dimen/_5sdp"/>
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_last10info"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
 
                             <!--</androidx.cardview.widget.CardView>-->
 
@@ -670,6 +707,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:layout_marginLeft="@dimen/_5sdp"
+                                android:backgroundTint="#DDFAEC"
                                 android:background="@drawable/shadow_selector_page">
 
                                 <TextView
@@ -680,7 +718,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="Total Order Value"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -692,6 +730,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:layout_marginLeft="@dimen/_5sdp"
+                                android:backgroundTint="#F8EDDC"
                                 android:background="@drawable/shadow_selector_page2">
 
                                 <TextView
@@ -702,7 +741,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="Avg Order Value"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -723,6 +762,7 @@
                                 android:gravity="center"
                                 android:layout_gravity="center_vertical|center_horizontal"
                                 android:layout_marginLeft="@dimen/_80sdp"
+                                android:backgroundTint="#DAEDFA"
                                 android:background="@drawable/shadow_selector_page1">
 
                                 <TextView
@@ -733,7 +773,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="Total Order Count"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -804,7 +844,14 @@
                                     android:background="@drawable/ic_round_share"
                                     android:padding="@dimen/_5sdp"
                                     android:scaleType="fitCenter" />
-
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_activityageinginfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
                             <!--</androidx.cardview.widget.CardView>-->
 
                             <!-- end V 3.9.9  0026308 mantis new logo added  -->
@@ -884,10 +931,10 @@
                                     android:layout_gravity="end"
                                     android:layout_weight="1.6"
                                     android:background="@drawable/border_background_small_1"
-                                    android:backgroundTint="#f3090a"
+                                    android:backgroundTint="#FBC0C0"
                                     android:gravity="center"
                                     android:text="0 \n Days"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -943,10 +990,10 @@
                                     android:layout_gravity="end"
                                     android:layout_weight="1.6"
                                     android:background="@drawable/border_background_small_1"
-                                    android:backgroundTint="#051ba2"
+                                    android:backgroundTint="#CED4F8"
                                     android:gravity="center"
                                     android:text=""
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -1010,10 +1057,10 @@
                                     android:layout_gravity="end"
                                     android:layout_weight="1.6"
                                     android:background="@drawable/border_background_small_1"
-                                    android:backgroundTint="#0ca485"
+                                    android:backgroundTint="#D6F8F1"
                                     android:gravity="center"
                                     android:text=""
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -1069,10 +1116,10 @@
                                     android:layout_gravity="end"
                                     android:layout_weight="1.6"
                                     android:background="@drawable/border_background_small_1"
-                                    android:backgroundTint="#c8810d"
+                                    android:backgroundTint="#FAEFDD"
                                     android:gravity="center"
                                     android:text=""
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"
                                     android:textStyle="bold" />
 
@@ -1225,7 +1272,14 @@
                                     android:background="@drawable/ic_round_share"
                                     android:padding="@dimen/_5sdp"
                                     android:scaleType="fitCenter" />
-
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_partywisesalesinfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
                             <!--androidx.cardview.widget.CardView>-->
                              <!-- start V 3.9.9  0026308 mantis new logo added  -->
 
@@ -1265,6 +1319,7 @@
                                 android:layout_height="@dimen/_35sdp"
                                 android:gravity="center"
                                 android:background="@drawable/shadow_selector_page_cus_white"
+                                android:backgroundTint="#083681"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -1357,6 +1412,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/red_color_custom_round_bg"
+                            android:backgroundTint="#083681"
                             android:orientation="vertical">
 
                             <TextView
@@ -1430,6 +1486,15 @@
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_gravity="center"
                                 android:singleLine="true" />
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_headerCountinfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
+
 
                         </LinearLayout>
 
@@ -1492,6 +1557,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/red_color_custom_round_bg"
+                            android:backgroundTint="#083681"
                             android:orientation="vertical">
 
                             <TextView
@@ -1564,6 +1630,14 @@
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_gravity="center"
                                 android:singleLine="true" />
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_headerCountNotvisitedinfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
 
                         </LinearLayout>
 
@@ -1628,6 +1702,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/red_color_custom_round_bg"
+                            android:backgroundTint="#083681"
                             android:orientation="vertical">
 
                             <TextView
@@ -1702,6 +1777,15 @@
                                 android:layout_gravity="center"
                                 android:singleLine="true" />
 
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_headerCountNotproductnotsellinfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
+
                         </LinearLayout>
 
 
@@ -1768,6 +1852,7 @@
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginEnd="@dimen/_10sdp"
                                 android:background="@drawable/red_color_custom_round_bg"
+                                android:backgroundTint="#083681"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -1843,6 +1928,14 @@
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_gravity="center"
                                 android:singleLine="true" />
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_headerCountNotcollectioninfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
 
                         </LinearLayout>
 
@@ -1907,6 +2000,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/red_color_custom_round_bg"
+                            android:backgroundTint="#083681"
                             android:orientation="vertical">
 
                             <TextView
@@ -1975,10 +2069,18 @@
                                 android:text="(Total party count)"
                                 android:textSize="@dimen/_8sdp"
                                 android:textColor="@color/gray_50_dark"
-                                android:gravity="center"
+                                 android:gravity="center"
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_gravity="center"
                                 android:singleLine="true" />
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_headerCount_zeroOrderinfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
 
                         </LinearLayout>
 
@@ -2042,6 +2144,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/red_color_custom_round_bg"
+                            android:backgroundTint="#083681"
                             android:orientation="vertical">
 
                             <TextView
@@ -2114,6 +2217,14 @@
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_gravity="center"
                                 android:singleLine="true" />
+                            <ImageView
+                                android:id="@+id/iv_frag_performance_headerCount_noVisitinfo"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:background="@drawable/info_icon"
+                                android:scaleType="fitXY" />
 
                         </LinearLayout>
 

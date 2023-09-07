@@ -1,9 +1,12 @@
 package com.breezefsmvenseconnect.features.logoutsync.presentation
 
 import android.app.ActivityManager
+import android.app.Dialog
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.*
 import androidx.annotation.RequiresApi
@@ -20,6 +23,9 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.breezefsmvenseconnect.CustomConstants
 
 
@@ -89,12 +95,14 @@ import com.breezefsmvenseconnect.features.viewAllOrder.model.AddOrderInputProduc
 import com.breezefsmvenseconnect.mappackage.SendBrod
 import com.breezefsmvenseconnect.widgets.AppCustomTextView
 import com.breezefsmvenseconnect.MonitorService
+import com.breezefsmvenseconnect.MySingleton
 import com.breezefsmvenseconnect.features.addshop.model.*
 import com.breezefsmvenseconnect.features.addshop.model.assigntopplist.AddShopUploadImg
 import com.breezefsmvenseconnect.features.addshop.presentation.ShopExtraContactReq
 import com.breezefsmvenseconnect.features.addshop.presentation.multiContactRequestData
 import com.breezefsmvenseconnect.features.login.api.LoginRepositoryProvider
 import com.breezefsmvenseconnect.features.login.model.GetConcurrentUserResponse
+import com.breezefsmvenseconnect.features.login.model.WhatsappApiData
 import com.breezefsmvenseconnect.features.performance.model.Gps_status_list
 import com.breezefsmvenseconnect.features.performance.model.UpdateGpsInputListParamsModel
 import com.breezefsmvenseconnect.features.returnsOrder.ReturnProductList
@@ -104,9 +112,15 @@ import com.breezefsmvenseconnect.features.viewAllOrder.orderNew.NewOrderScrActiF
 import com.breezefsmvenseconnect.features.viewAllOrder.orderNew.NeworderScrCartFragment
 import com.facebook.stetho.common.LogUtil
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.gson.JsonParser
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_new.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import timber.log.Timber
@@ -6591,7 +6605,86 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     }
     //===========================================================ADD ACTIVITY========================================================
 
-
+    val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    fun syncWhatsappStatus(){
+        if(Pref.IsShowWhatsAppIconforVisit || Pref.IsAutomatedWhatsAppSendforRevisit){
+            scope.launch {
+                println("tag_supr begin")
+                var whatsL = AppDatabase.getDBInstance()?.visitRevisitWhatsappStatusDao()!!.getUnsyncList() as ArrayList<VisitRevisitWhatsappStatus>
+                for(i in 0..whatsL.size-1){
+                    val stringRequest: StringRequest = object : StringRequest(
+                        Request.Method.POST, "https://theultimate.io/WAApi/report",
+                        Response.Listener<String?> { response ->
+                            var resp = JsonParser.parseString(response)
+                            var statusCode = resp.asJsonObject.get("code").toString()
+                            var data =  resp.asJsonObject.get("data")
+                            try{
+                                var f1 = data.asJsonObject
+                                var f2 = f1.asJsonObject.get("records")
+                                var f3 =f2.asJsonArray
+                                var status = f3.get(0).asJsonObject.get("status").toString().drop(1).dropLast(1)
+                                var cause = f3.get(0).asJsonObject.get("cause").toString().drop(1).dropLast(1)
+                                if(statusCode.equals("200",ignoreCase = true)){
+                                    if(status.equals("DELIVERED")){
+                                        var msg = if(cause.contains("Read By User",ignoreCase = true)) "Read by User" else "Sent Successfully"
+                                        AppDatabase.getDBInstance()?.visitRevisitWhatsappStatusDao()!!.updateWhatsStatus(true,msg,whatsL.get(i).sl_no,whatsL.get(i).transactionId)
+                                    }else{
+                                        AppDatabase.getDBInstance()?.visitRevisitWhatsappStatusDao()!!.updateWhatsStatus(false,status.toString(),whatsL.get(i).sl_no,whatsL.get(i).transactionId)
+                                    }
+                                }
+                            }catch (ex:Exception){
+                                ex.printStackTrace()
+                            }
+                        },
+                        Response.ErrorListener { error ->
+                            Timber.d("error in whatsapp report api ${error.message}")
+                        })
+                    {
+                        override fun getParams(): Map<String, String>? {
+                            val params: MutableMap<String, String> = HashMap()
+                            params.put("userId", "eurobondwa")
+                            params.put("password", "Eurobondwa@123")
+                            params.put("wabaNumber", "917888488891")
+                            params.put("fromDate", "${AppUtils.getCurrentDateForShopActi()}")
+                            params.put("toDate", "${AppUtils.getCurrentDateForShopActi()}")
+                            params.put("uuId", whatsL.get(i).transactionId.toString())
+                            return params
+                        }
+                    }
+                    MySingleton.getInstance(mContext.applicationContext)!!.addToRequestQueue(stringRequest)
+                    delay(450)
+                }
+            }.invokeOnCompletion {
+                println("tag_supr finish")
+                var obL =AppDatabase.getDBInstance()?.visitRevisitWhatsappStatusDao()!!.getUnsyncList() as ArrayList<VisitRevisitWhatsappStatus>
+                if(obL.size!= 0){
+                    var ob = WhatsappApiData(Pref.user_id.toString(),obL)
+                    val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
+                    BaseActivity.compositeDisposable.add(
+                        repository.whatsAppStatusSync(ob)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                val addShopResult = result as BaseResponse
+                                if(addShopResult.status.equals("200")){
+                                    AppDatabase.getDBInstance()?.visitRevisitWhatsappStatusDao()!!.updateWhatsStatusUpload()
+                                    calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                }else{
+                                    calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                }
+                            }, { error ->
+                                error.printStackTrace()
+                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            })
+                    )
+                }else{
+                    calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                }
+            }
+        }else{
+            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+        }
+    }
 
     //===============================================Logout===========================================================================//
     private fun calllogoutApi(user_id: String, session_id: String) {
@@ -7385,7 +7478,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private fun callAppInfoApi() {
         if (!Pref.isAppInfoEnable) {
-            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            syncWhatsappStatus()
             return
         }
 
@@ -7393,7 +7487,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         if (unSyncData == null || unSyncData.isEmpty()) {
             Timber.e("=======Appinfo list is empty (Logout Sync)=========")
-            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            syncWhatsappStatus()
             return
         }
 
@@ -7442,13 +7537,15 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                                     uiThread {
                                         progress_wheel.stopSpinning()
-                                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                        //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                        syncWhatsappStatus()
                                     }
                                 }
                             }
                             else {
                                 progress_wheel.stopSpinning()
-                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                syncWhatsappStatus()
                             }
 
                         }, { error ->
@@ -7456,7 +7553,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             Timber.d("App Info : ERROR : " + error.localizedMessage)
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            syncWhatsappStatus()
                         })
         )
     }

@@ -376,6 +376,10 @@ class NewReturnListFragment : BaseFragment() {
             override fun onMultipleImageClick(shop: Any, position: Int) {
                 TODO("Not yet implemented")
             }
+
+            override fun onWhatsApiClick(shop_id: String) {
+                TODO("Not yet implemented")
+            }
         }, {
 
             val heading = "ORDERS RETURN"

@@ -1,6 +1,7 @@
 package com.breezefsmvenseconnect.features.viewAllOrder.orderOptimized
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import java.text.SimpleDateFormat
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmvenseconnect.CustomStatic
 import com.breezefsmvenseconnect.R
@@ -53,10 +55,15 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.customnotification.view.text
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.util.Calendar
+import java.util.Locale
 import java.util.Random
 
 // Rev 1.0 OrderProductCartFrag AppV 4.0.8 Suman    21/04/2023 IsAllowZeroRateOrder updation 25879
 // Rev 2.0 OrderProductCartFrag v 4.1.6 stock optmization mantis 0026391 20-06-2023 saheli
+// Rev 3.0 v 4.1.6  0026439: Order Edit in cart optimization saheli 26-06-2023
+//Rev 4.0 v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+
 class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
 
     private lateinit var mContext: Context
@@ -64,6 +71,8 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
     private lateinit var cartAdapter : AdapterOrdCartOptimized
     private lateinit var tv_totalItem : TextView
     private lateinit var tv_totalAmt : TextView
+    private lateinit var pick_a_date : TextView
+    var myCalendar = Calendar.getInstance(Locale.ENGLISH)
     private lateinit var llPlaceOrder : LinearLayout
     private lateinit var progrwss_wheel: ProgressWheel
 
@@ -72,6 +81,17 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
     private var shopDtls = AddShopDBModelEntity()
 
     private lateinit var tv_text_dynamic_place:TextView
+    //Begin 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+
+    val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        // TODO Auto-generated method stub
+        myCalendar.set(Calendar.YEAR, year)
+        myCalendar.set(Calendar.MONTH, monthOfYear)
+        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        updateLabel()
+
+    }
+    //End 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -81,6 +101,9 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
     companion object {
         var cartInfo: FinalOrderDataWithShopID? = null
         var shop_id: String = ""
+        // start Rev 3.0 v 4.1.6  0026439: Order Edit in cart optimization saheli 26-06-2023
+        var iseditCommit:Boolean = true
+        // end Rev 3.0 v 4.1.6  0026439: Order Edit in cart optimization saheli 26-06-2023
         //var cartOrdList: ArrayList<FinalOrderData>? = null
         fun getInstance(objects: Any): OrderProductCartFrag {
             val Fragment = OrderProductCartFrag()
@@ -97,12 +120,15 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
         initView(view)
         return view
     }
-
+    fun updateLabel() {
+        pick_a_date.text = AppUtils.getFormattedDate(myCalendar.time)
+           }
     @SuppressLint("UseRequireInsteadOfGet")
     private fun initView(view: View) {
         rv_prodL = view!!.findViewById(R.id.rv_ord_prod_cart_frag)
         tv_totalItem = view.findViewById(R.id.tv_ord_prod_cart_frag_total_item)
         tv_totalAmt = view.findViewById(R.id.tv_ord_prod_cart_frag_total_value)
+        pick_a_date = view.findViewById(R.id.Card_pick_a_date_TV)
         llPlaceOrder = view.findViewById(R.id.ll_ord_prod_cart_frag_place_order)
         tv_text_dynamic_place = view.findViewById(R.id.tv_place_Order_dynamic)
         progrwss_wheel = view.findViewById(R.id.pw_frag_ord_cart_list)
@@ -115,8 +141,17 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
             tv_text_dynamic_place.text = "Place Stock"
         }
         // end 2.0 OrderProductCartFrag v 4.1.6 stock optmization mantis 0026391 20-06-2023 saheli
+        //Begin 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+        if(Pref.IsAllowBackdatedOrderEntry){
+            pick_a_date.visibility = View.VISIBLE
+        }else{
+            pick_a_date.visibility = View.GONE
+        }
+        pick_a_date.setOnClickListener(this)
+        //End 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
 
         llPlaceOrder.setOnClickListener(this)
+
 
         shopDtls = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shop_id)
 
@@ -136,7 +171,8 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
     }
 
     fun loadCartAdapter(){
-        cartAdapter = AdapterOrdCartOptimized(mContext,OrderProductListFrag.finalOrderDataList!!,object :
+        cartAdapter = AdapterOrdCartOptimized(mContext,OrderProductListFrag.finalOrderDataList!!,
+            shop_id,object :
             AdapterOrdCartOptimized.OnRateQtyOptiOnClick{
             override fun onRateChangeClick(productID: String, changingRate: String) {
                 doAsync {
@@ -212,12 +248,14 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.ll_ord_prod_cart_frag_place_order ->{
-                if(OrderProductListFrag.finalOrderDataList!!.size>0 ){
-                    progrwss_wheel.spin()
+                // start Rev 3.0 v 4.1.6  0026439: Order Edit in cart optimization saheli 26-06-2023
+                if(iseditCommit){
+                    if(OrderProductListFrag.finalOrderDataList!!.size>0 ){
+                        progrwss_wheel.spin()
 
-                    var isValidQty = true
-                    var isValidRate = true
-                    for(i in 0..OrderProductListFrag.finalOrderDataList!!.size-1){
+                        var isValidQty = true
+                        var isValidRate = true
+                        for(i in 0..OrderProductListFrag.finalOrderDataList!!.size-1){
                             if(OrderProductListFrag.finalOrderDataList!!.get(i).qty.toDouble() == 0.0){
                                 isValidQty = false
                                 break
@@ -227,28 +265,48 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
                                 break
                             }
                         }
-                    if(!isValidQty) {
-                        progrwss_wheel.stopSpinning()
-                        ToasterMiddle.msgShort(mContext,"Please enter valid quantity.")
-                        return
-                    }
-                    // Rev 1.0 OrderProductCartFrag AppV 4.0.8 Suman    21/04/2023 IsAllowZeroRateOrder updation 25879
-                    else if(!isValidRate && !Pref.IsAllowZeroRateOrder){
-                        // End of Rev 1.0
-                        progrwss_wheel.stopSpinning()
-                        ToasterMiddle.msgShort(mContext,"Please enter valid Rate.")
-                        return
-                    }
-                    // start 2.0 OrderProductCartFrag v 4.1.6 stock optmization mantis 0026391 20-06-2023 saheli
-                    if(Pref.savefromOrderOrStock){
-                        showCheckAlert("Order Confirmation", "Would you like to confirm the order?")
-                    }else{
-                        showCheckStockAlert("Stock Confirmation", "Would you like to confirm the stock?")
-                    }
-                    // end 2.0 OrderProductCartFrag v 4.1.6 stock optmization mantis 0026391 20-06-2023 saheli
+                        if(!isValidQty) {
+                            progrwss_wheel.stopSpinning()
+                            ToasterMiddle.msgShort(mContext,"Please enter valid quantity.")
+                            return
+                        }
+                        // Rev 1.0 OrderProductCartFrag AppV 4.0.8 Suman    21/04/2023 IsAllowZeroRateOrder updation 25879
+                        else if(!isValidRate && !Pref.IsAllowZeroRateOrder){
+                            // End of Rev 1.0
+                            progrwss_wheel.stopSpinning()
+                            ToasterMiddle.msgShort(mContext,"Please enter valid Rate.")
+                            return
+                        }
+                        // start 2.0 OrderProductCartFrag v 4.1.6 stock optmization mantis 0026391 20-06-2023 saheli
+                        if(Pref.savefromOrderOrStock){
+                            showCheckAlert("Order Confirmation", "Would you like to confirm the order?")
+                        }else{
+                            showCheckStockAlert("Stock Confirmation", "Would you like to confirm the stock?")
+                        }
+                        // end 2.0 OrderProductCartFrag v 4.1.6 stock optmization mantis 0026391 20-06-2023 saheli
 
+                    }
+                }else{
+                    openDialog("Please click on tick to save this edit.")
                 }
+                // end Rev 3.0 v 4.1.6  0026439: Order Edit in cart optimization saheli 26-06-2023
+
             }
+            //Begin 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+            R.id.Card_pick_a_date_TV -> {
+                val calendar = Calendar.getInstance()
+
+                calendar.add(Calendar.DAY_OF_MONTH, - Pref.Order_Past_Days.toInt())
+                val minDate = calendar.timeInMillis
+
+                val datePicker = DatePickerDialog(mContext, R.style.DatePickerTheme, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH))
+                datePicker.datePicker.maxDate = Calendar.getInstance(Locale.ENGLISH).timeInMillis
+                datePicker.datePicker.minDate = minDate
+                datePicker.show()
+            }    //End 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+
         }
     }
 
@@ -265,7 +323,7 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
                 val list = AppDatabase.getDBInstance()!!.orderDetailsListDao().getListAccordingDate(AppUtils.getCurrentDate())
                 if (list == null || list.isEmpty()) {
                     orderListDetails.order_id = Pref.user_id + AppUtils.getCurrentDateMonth() + "0001"
-                } else {
+                } else if(Pref.IsAllowBackdatedOrderEntry == false){
                     val lastId = list[0].order_id?.toLong()
                     val finalId = lastId!! + 1
                     orderListDetails.order_id = finalId.toString()
@@ -273,6 +331,16 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
                 orderListDetails.shop_id = shop_id
                 orderListDetails.date = AppUtils.getCurrentISODateTime()
                 orderListDetails.only_date = AppUtils.getCurrentDate()
+                //Begin 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+                if(Pref.IsAllowBackdatedOrderEntry){
+                    orderListDetails.date =SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).format(myCalendar.time).toString()
+                    orderListDetails.only_date = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format(myCalendar.time).toString()
+                    println("def_date ${orderListDetails.date} ${orderListDetails.only_date}")
+
+                    val random = Random()
+                    orderListDetails.order_id = Pref.user_id + System.currentTimeMillis().toString() +  (random.nextInt(999 - 100) + 100).toString()
+                }
+                //End 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
 
                 orderListDetails.remarks = remarksStr
                 orderListDetails.signature = imagePathStr
@@ -645,5 +713,21 @@ class OrderProductCartFrag : BaseFragment(), View.OnClickListener{
                 Log.e("Add Order", "TTS error in converting Text to Speech!")
         }
     }
+
+    // start Rev 3.0 v 4.1.6  0026439: Order Edit in cart optimization saheli 26-06-2023
+    fun openDialog(text:String){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_ok)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_yes_header_TV) as AppCustomTextView
+        dialogHeader.text = text
+        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+        })
+        simpleDialog.show()
+    }
+    // end Rev 3.0 v 4.1.6  0026439: Order Edit in cart optimization saheli 26-06-2023
 
 }

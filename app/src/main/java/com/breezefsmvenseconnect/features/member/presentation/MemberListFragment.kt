@@ -263,6 +263,37 @@ class MemberListFragment : BaseFragment() {
         tv_member_no.text = "Total member(s): " + member_list.size
         adapter = MemberListAdapter(mContext, member_list, object : MemberListAdapter.OnClickListener {
 
+            override fun onAllPartyClick(team: TeamListDataModel) {
+                CustomStatic.BreakageViewFromTeam_Name = team.user_name
+                CustomStatic.IsTeamAllParty = true
+                //(mContext as DashboardActivity).loadFragment(FragType.MemberShopListFragment, true, member_list[adapterPosition].user_id)
+                CommonDialog.getInstance(AppUtils.hiFirstNameText() + "!", "What you like to do?", "Show all Party", getString(R.string.new_visit_shop), false, false, true, object : CommonDialogClickListener {
+                    override fun onLeftClick() {
+                        checkTeamHierarchyList(team.user_name)
+                        if (Pref.isShowPartyInAreaWiseTeam) {
+                            (mContext as DashboardActivity).loadFragment(FragType.AreaListFragment, true, team.user_id)
+                            (mContext as DashboardActivity).isAllMemberShop = true
+                        } else {
+                            CustomStatic.ShopFeedBachHisUserId = team.user_id
+                            (mContext as DashboardActivity).loadFragment(FragType.MemberAllShopListFragment, true, team.user_id)
+                        }
+                    }
+
+                    override fun onRightClick(editableData: String) {
+                        checkTeamHierarchyList(team.user_name)
+
+                        if (Pref.isShowPartyInAreaWiseTeam) {
+                            (mContext as DashboardActivity).loadFragment(FragType.AreaListFragment, true, team.user_id)
+                            (mContext as DashboardActivity).isAllMemberShop = false
+                        } else {
+                            CustomStatic.ShopFeedBachHisUserId = team.user_id
+                            (mContext as DashboardActivity).loadFragment(FragType.MemberShopListFragment, true, team.user_id)
+                        }
+                    }
+
+                }).show((mContext as DashboardActivity).supportFragmentManager, "")
+            }
+
             override fun onZeroOrderClick(team: TeamListDataModel) {
                 getOrderListFromZeroOrd(team.user_id, team)
             }
@@ -298,6 +329,7 @@ class MemberListFragment : BaseFragment() {
 
             override fun onShopClick(team: TeamListDataModel) {
                 CustomStatic.BreakageViewFromTeam_Name = team.user_name
+                CustomStatic.IsTeamAllParty = false
                 //(mContext as DashboardActivity).loadFragment(FragType.MemberShopListFragment, true, member_list[adapterPosition].user_id)
                 CommonDialog.getInstance(AppUtils.hiFirstNameText() + "!", "What you like to do?", getString(R.string.total_shops), getString(R.string.new_visit_shop), false, false, true, object : CommonDialogClickListener {
                     override fun onLeftClick() {

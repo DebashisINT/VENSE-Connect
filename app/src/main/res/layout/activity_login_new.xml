@@ -60,6 +60,7 @@
                     android:layout_below="@+id/logo_new"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:gravity="center|center_horizontal"
                     android:layout_gravity="center"
                     android:textStyle="bold"
@@ -67,7 +68,6 @@
                     android:textColor="#287fb2"
                     android:text="@string/name_filed_managenent_system"
                     android:textSize="@dimen/_12sdp"
-                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
                 <com.breezefsmvenseconnect.widgets.AppCustomTextView

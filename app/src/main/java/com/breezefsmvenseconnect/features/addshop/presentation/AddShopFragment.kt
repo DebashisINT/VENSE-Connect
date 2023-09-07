@@ -39,7 +39,13 @@ import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
 import com.breezefsmvenseconnect.CustomStatic
+import com.breezefsmvenseconnect.MySingleton
 import com.breezefsmvenseconnect.R
 import com.breezefsmvenseconnect.app.AppDatabase
 import com.breezefsmvenseconnect.app.NetworkConstant
@@ -84,6 +90,7 @@ import com.breezefsmvenseconnect.features.login.model.productlistmodel.ModelList
 import com.breezefsmvenseconnect.features.login.presentation.LoginActivity
 import com.breezefsmvenseconnect.features.nearbyshops.api.ShopListRepositoryProvider
 import com.breezefsmvenseconnect.features.nearbyshops.model.*
+import com.breezefsmvenseconnect.features.photoReg.PhotoRegAadhaarFragment
 import com.breezefsmvenseconnect.features.shopdetail.presentation.api.EditShopRepoProvider
 import com.breezefsmvenseconnect.features.viewAllOrder.interf.QaOnCLick
 import com.breezefsmvenseconnect.widgets.AppCustomEditText
@@ -98,6 +105,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_add_shop.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import org.json.JSONArray
+import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -5544,6 +5553,20 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
     private var permissionUtils: PermissionUtils? = null
     private fun initPermissionCheck() {
+
+        //begin mantis id 26741 Storage permission updation Suman 22-08-2023
+        var permissionList = arrayOf<String>( Manifest.permission.CAMERA)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permissionList += Manifest.permission.READ_MEDIA_IMAGES
+            permissionList += Manifest.permission.READ_MEDIA_AUDIO
+            permissionList += Manifest.permission.READ_MEDIA_VIDEO
+        }else{
+            permissionList += Manifest.permission.WRITE_EXTERNAL_STORAGE
+            permissionList += Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+//end mantis id 26741 Storage permission updation Suman 22-08-2023
+
         permissionUtils = PermissionUtils(mContext as Activity, object : PermissionUtils.OnPermissionListener {
             override fun onPermissionGranted() {
                 if (isDocDegree == 1)
@@ -5555,11 +5578,25 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             override fun onPermissionNotGranted() {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.accept_permission))
             }
+            // mantis id 26741 Storage permission updation Suman 22-08-2023
+        },permissionList)// arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
 
-        }, arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
     private fun initPermissionCheckOne() {
+        //begin mantis id 26741 Storage permission updation Suman 22-08-2023
+        var permissionList = arrayOf<String>( Manifest.permission.CAMERA)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permissionList += Manifest.permission.READ_MEDIA_IMAGES
+            permissionList += Manifest.permission.READ_MEDIA_AUDIO
+            permissionList += Manifest.permission.READ_MEDIA_VIDEO
+        }else{
+            permissionList += Manifest.permission.WRITE_EXTERNAL_STORAGE
+            permissionList += Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+//end mantis id 26741 Storage permission updation Suman 22-08-2023
+
         permissionUtils = PermissionUtils(mContext as Activity, object : PermissionUtils.OnPermissionListener {
             override fun onPermissionGranted() {
                 showPictureDialog()
@@ -5568,8 +5605,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             override fun onPermissionNotGranted() {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.accept_permission))
             }
-
-        }, arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+// mantis id 26741 Storage permission updation Suman 22-08-2023
+        },permissionList)// arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
     fun onRequestPermission(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -5837,6 +5874,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             (mContext as DashboardActivity).startActivityForResult(intent, PermissionHelper.REQUEST_CODE_CAMERA)*/
 
 
+        }else{
+            var permission = false
         }
     }
 
@@ -6852,6 +6891,27 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         addShopData.GSTN_Number = shopDataModel.gstN_Number
         addShopData.ShopOwner_PAN = shopDataModel.shopOwner_PAN
 
+
+        if(Pref.IsShowWhatsAppIconforVisit){
+            saveWhatsappApiStatusDB(addShopData, shopDataModel.shopImageLocalPath, shopDataModel.doc_degree)
+        }else{
+            addShopApi(addShopData, shopDataModel.shopImageLocalPath, shopDataModel.doc_degree)
+        }
+
+    }
+
+    private fun saveWhatsappApiStatusDB(addShop: AddShopRequestData, shop_imgPath: String?, doc_degree: String?){
+        var obj = VisitRevisitWhatsappStatus()
+        obj.shop_id = addShopData.shop_id!!
+        obj.shop_name = addShopData.shop_name!!
+        obj.contactNo = addShopData.owner_contact_no!!
+        obj.isNewShop = true
+        obj.date = AppUtils.getCurrentDateForShopActi()
+        obj.time = AppUtils.getCurrentTime()
+        obj.isWhatsappSent = false
+        obj.whatsappSentMsg =""
+        obj.isUploaded = false
+        AppDatabase.getDBInstance()?.visitRevisitWhatsappStatusDao()!!.insert(obj)
 
         addShopApi(addShopData, shopDataModel.shopImageLocalPath, shopDataModel.doc_degree)
     }

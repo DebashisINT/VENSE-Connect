@@ -65,8 +65,9 @@ import com.breezefsmvenseconnect.features.taskManagement.model.TaskManagmentEnti
         NewOrderGenderEntity::class, NewOrderProductEntity::class, NewOrderColorEntity::class, NewOrderSizeEntity::class, NewOrderScrOrderEntity::class, ProspectEntity::class,
         QuestionEntity::class, QuestionSubmitEntity::class, AddShopSecondaryImgEntity::class, ReturnDetailsEntity::class, ReturnProductListEntity::class, UserWiseLeaveListEntity::class, ShopFeedbackEntity::class, ShopFeedbackTempEntity::class, LeadActivityEntity::class,
         ShopDtlsTeamEntity::class, CollDtlsTeamEntity::class, BillDtlsTeamEntity::class, OrderDtlsTeamEntity::class,
-        TeamAllShopDBModelEntity::class, DistWiseOrderTblEntity::class, NewGpsStatusEntity::class,ShopExtraContactEntity::class,ProductOnlineRateTempEntity::class, TaskManagmentEntity::class),
-        version = 1, exportSchema = false)
+        TeamAllShopDBModelEntity::class, DistWiseOrderTblEntity::class, NewGpsStatusEntity::class,ShopExtraContactEntity::class,ProductOnlineRateTempEntity::class, TaskManagmentEntity::class,
+    VisitRevisitWhatsappStatus::class),
+        version = 2, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -206,6 +207,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 
     abstract fun taskManagementDao(): TaskManagementDao
+    abstract fun visitRevisitWhatsappStatusDao(): VisitRevisitWhatsappStatusDao
 
 
     companion object {
@@ -217,7 +219,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // allow queries on the main thread.
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
-                        .addMigrations()
+                        .addMigrations(MIGRATION_1_2)
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -231,9 +233,23 @@ abstract class AppDatabase : RoomDatabase() {
         fun destroyInstance() {
             INSTANCE = null
         }
+        val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+//                database.execSQL("CREATE TABLE shop_visit_revisit_whatsapp_status (sl_no INTEGER NOT NULL PRIMARY KEY, shop_id TEXT, shop_name TEXT, contactNo TEXT, isNewShop INTEGER NOT NULL DEFAULT 0, " +
+//                        "date TEXT, time TEXT,isWhatsappSent INTEGER NOT NULL DEFAULT 0,whatsappSentMsg TEXT,transactionId TEXT,isUploaded INTEGER NOT NULL DEFAULT 0,transactionId TEXT NOT NULL DEFAULT '')")
+
+                database.execSQL("CREATE TABLE shop_visit_revisit_whatsapp_status (sl_no INTEGER NOT NULL PRIMARY KEY, shop_id TEXT NOT NULL, shop_name TEXT NOT NULL, contactNo TEXT NOT NULL, " +        "isNewShop INTEGER NOT NULL , " +        "date TEXT NOT NULL, time TEXT NOT NULL,isWhatsappSent INTEGER NOT NULL ,whatsappSentMsg TEXT NOT NULL,isUploaded INTEGER NOT NULL,transactionId TEXT NOT NULL  )")
+
+                // database.execSQL("alter table shop_visit_revisit_whatsapp_status ADD COLUMN transactionId TEXT NOT NULL DEFAULT '' ")
+                database.execSQL("alter table product_online_rate_temp_table ADD COLUMN Qty_per_Unit REAL")
+                database.execSQL("alter table product_online_rate_temp_table ADD COLUMN Scheme_Qty REAL")
+                database.execSQL("alter table product_online_rate_temp_table ADD COLUMN Effective_Rate REAL")
 
 
-    }
+            }
+        }
+
+   }
 
 
 //}

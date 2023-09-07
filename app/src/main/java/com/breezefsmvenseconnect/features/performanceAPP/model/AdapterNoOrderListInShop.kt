@@ -9,16 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmvenseconnect.R
 import com.breezefsmvenseconnect.app.AppDatabase
 import com.breezefsmvenseconnect.app.uiaction.IntentActionable
+import com.breezefsmvenseconnect.app.utils.AppUtils
 import com.breezefsmvenseconnect.features.performanceAPP.NoOrderTakenList
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_ma_addr1
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_ma_name
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_ma_shop_catagory_retailer1
+import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_ma_shop_count
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_shop_type1
+import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_tv_text_dynamic
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_name
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_phone_number
-import kotlinx.android.synthetic.main.row_no_zero_order_shop.view.tv_row_shop_list_ma_shop_count
 
-class AdapterNoOrderListInShop(var mContext: Context, var mList:ArrayList<NoOrderTakenList>):
+
+class AdapterNoOrderListInShop(var mContext: Context, var mList:ArrayList<NoOrderTakenList>,var isFromZeroOrderParty:Boolean=false):
     RecyclerView.Adapter<AdapterNoOrderListInShop.CrossSellProductViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrossSellProductViewHolder {
@@ -67,7 +70,12 @@ class AdapterNoOrderListInShop(var mContext: Context, var mList:ArrayList<NoOrde
             }
 
             try{
-                itemView.tv_row_shop_list_ma_shop_count.text = mList.get(adapterPosition).age_since_party_creation_count.toDouble().toInt().toString()
+//                itemView.tv_row_shop_list_tv_text_dynamic.text = "age since party creation"
+                itemView.tv_row_shop_list_tv_text_dynamic.text = "age since last visit"
+//                var lastOrderD = AppDatabase.getDBInstance()?.orderDetailsListDao()?.getLastOrderDate(mList.get(adapterPosition).shop_id)
+////                itemView.tv_row_shop_list_ma_shop_count.text = AppUtils.changeDateFormat2(lastVisitedD!!).replace("/", "_")
+//                itemView.tv_row_shop_list_ma_shop_count.text = lastOrderD
+                    itemView.tv_row_shop_list_ma_shop_count.text = mList.get(adapterPosition).age_since_party_creation_count.toDouble().toInt().toString()
             }catch (ex:Exception){
                 itemView.tv_row_shop_list_ma_shop_count.text =  "N/A"
             }

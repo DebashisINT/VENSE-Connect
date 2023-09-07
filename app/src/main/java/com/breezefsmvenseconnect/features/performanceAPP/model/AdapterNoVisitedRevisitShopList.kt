@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_phone_n
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_ma_name
 import kotlinx.android.synthetic.main.row_no_order_shop.view.tv_row_shop_list_shop_type1
 import kotlinx.android.synthetic.main.row_no_zero_order_shop.view.tv_row_shop_list_ma_shop_count
+import kotlinx.android.synthetic.main.row_no_zero_order_shop.view.tv_row_shop_list_tv_text_dynamic
 import kotlinx.android.synthetic.main.row_shop_list_ma.view.ll_row_shop_dtls_ma_contact1
 
 class AdapterNoVisitedRevisitShopList(var mContext: Context, var mList:ArrayList<ShopDtlsCustom>):

@@ -41,10 +41,14 @@ class SystemEventReceiver : BroadcastReceiver() {
                     calculategpsStatus(false)
                 }
                 else{
-                    Timber.e("First time airplane off detect")
-                    text = "Airplane Mode is Off "
-                    SendBrod.stopBrod(context)
-                    calculategpsStatus(true)
+                    try {
+                        Timber.e("First time airplane off detect")
+                        text = "Airplane Mode is Off "
+                        SendBrod.stopBrod(context)
+                        calculategpsStatus(true)
+                    }catch (ex : Exception){
+                        Timber.e("First time airplane off detect ${ex.message}")
+                    }
 
                 }
                 Timber.e("========================${text + AppUtils.getCurrentDateTime()}=======================")

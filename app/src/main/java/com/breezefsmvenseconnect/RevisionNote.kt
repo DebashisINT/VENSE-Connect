@@ -84,4 +84,17 @@ class RevisionNote {
     //0026349: New Feature in Performance Insights
     //Changes in Performance Insight module.26348
 
+    // 9.0 NearByShopsListFragment AppV 4.0.7 Suman 26-06-2023 0026307 mantis  26437
+
+    // 0026439: Order Edit in cart optimization saheli 26-06-2023
+    //0026422: Profile Photo not updated in the App saheli 26-06-2023
+    //3.0  DistributorwiseorderlistFragment App V 4.1.6 saheli 04-07-2023 0026504: Distributor wise order list click on assign party list app getting crash.
+    //  Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+
+    //Begin 16.0 DashboardFragment v 4.1.6 Tufan 11/07/2023 mantis 26546 revisit sync time
+
+    // 21.0 LoginActivity v 4.1.6 Suman 13/07/2023 mantis 26555 Usersettings
+
+    // mantis id 26741 Storage permission updation Suman 22-08-2023
+
 }

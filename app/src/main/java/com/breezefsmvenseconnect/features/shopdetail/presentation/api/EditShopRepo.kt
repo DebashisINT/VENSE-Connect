@@ -16,6 +16,8 @@ import com.breezefsmvenseconnect.features.addshop.model.LogFileResponse
 import com.breezefsmvenseconnect.features.dashboard.presentation.DashboardActivity
 import com.breezefsmvenseconnect.features.document.model.AddEditDocumentInputParams
 import com.breezefsmvenseconnect.features.document.model.DocumentAttachmentModel
+import com.breezefsmvenseconnect.features.login.model.WhatsappApiData
+import com.breezefsmvenseconnect.features.login.model.WhatsappApiFetchData
 import com.google.gson.Gson
 import io.reactivex.Observable
 import okhttp3.MediaType
@@ -31,6 +33,15 @@ class EditShopRepo(val apiService: EditShopApi) {
     fun editShop(shop: AddShopRequestData): Observable<AddShopResponse> {
         return apiService.editShop(shop)
     }
+
+    fun whatsAppStatusSync(obj: WhatsappApiData): Observable<BaseResponse> {
+        return apiService.whatsAppStatusSyncApi(obj)
+    }
+
+    fun whatsAppStatusFetch(user_id: String): Observable<WhatsappApiFetchData> {
+        return apiService.whatsAppStatusFetchApi(user_id)
+    }
+
 
     fun addShopWithImage(shop: AddShopRequestData, shop_image: String?, context: Context): Observable<AddShopResponse> {
         var profile_img_data: MultipartBody.Part? = null

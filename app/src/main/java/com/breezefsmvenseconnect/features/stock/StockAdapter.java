@@ -1,5 +1,6 @@
 package com.breezefsmvenseconnect.features.stock;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +50,7 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
 
 
     @Override
-    public void onBindViewHolder(ViewHolder attendanceFragmentViewHolder, final int position) {
+    public void onBindViewHolder(ViewHolder attendanceFragmentViewHolder, @SuppressLint("RecyclerView") final int position) {
         try {
             if (position % 2 == 0)
                 attendanceFragmentViewHolder.rcv_item_bg.setBackgroundColor(ContextCompat.getColor(context, R.color.report_screen_bg));
@@ -93,8 +94,17 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
                     attendanceFragmentViewHolder.ordered_amount_tv.setText(mViewAllOrderListEntityArray.get(position).getQty());
                 }
                 //attendanceFragmentViewHolder.ordered_amount_tv.setText(mViewAllOrderListEntityArray.get(position).getQty());
-
             }
+            if (!TextUtils.isEmpty(mViewAllOrderListEntityArray.get(position).getQty())) {
+                Double qtyRectify = Double.parseDouble(String.format("%.3f",Double.parseDouble(mViewAllOrderListEntityArray.get(position).getQty())));
+                if(qtyRectify- qtyRectify.intValue() == 0.0){
+                    attendanceFragmentViewHolder.ordered_amount_tv.setText(String.valueOf(qtyRectify.intValue()));
+                }else{
+                    attendanceFragmentViewHolder.ordered_amount_tv.setText(qtyRectify.toString());
+                }
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

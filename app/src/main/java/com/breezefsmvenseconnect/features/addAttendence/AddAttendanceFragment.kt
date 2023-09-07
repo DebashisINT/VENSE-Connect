@@ -124,6 +124,7 @@ import kotlin.collections.ArrayList
 // Rev 8.0 AddAttendanceFragment AppV 4.1.3 Suman    18/05/2023 beat flow updation 26120
 // Rev 9.0 AddAttendanceFragment AppV 4.1.3 Suman    20/05/2023 beat flow updation 26163
 // Rev 10.0 AddAttendanceFragment AppV 4.1.3 Suman    14/06/2023 leave problem with Reimbursement mantis id 26330
+// Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
 
 class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDateSetListener, OnMapReadyCallback {
 
@@ -268,7 +269,34 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             Timber.d("addAttend_check ${AppUtils.getCurrentDateTime()} ${Pref.current_latitude} ${Pref.current_latitude}")
         }, 1500)
 
+        if(AppUtils.getSharedPreferencesIsFaceDetection(mContext)){
+            initPermissionCheckStart()
+        }
+
         return view
+    }
+
+    private fun initPermissionCheckStart() {
+        //begin mantis id 26741 Storage permission updation Suman 22-08-2023
+        var permissionList = arrayOf<String>( Manifest.permission.CAMERA)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permissionList += Manifest.permission.READ_MEDIA_IMAGES
+            permissionList += Manifest.permission.READ_MEDIA_AUDIO
+            permissionList += Manifest.permission.READ_MEDIA_VIDEO
+        }else{
+            permissionList += Manifest.permission.WRITE_EXTERNAL_STORAGE
+            permissionList += Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+        //end mantis id 26741 Storage permission updation Suman 22-08-2023
+
+        permissionUtils = PermissionUtils(mContext as Activity, object : PermissionUtils.OnPermissionListener {
+            override fun onPermissionGranted() {
+            }
+            override fun onPermissionNotGranted() {
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.accept_permission))
+            }
+        },permissionList)// arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
     fun fetchCUrrentLoc(){
@@ -1305,10 +1333,16 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     }
 
     fun getLocforStart() {
+        //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+        Timber.d("------enter to getLocforStart -----")
+        //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
             if (AppUtils.isOnline(mContext)) {
                 if (AppUtils.mLocation != null) {
                     if (AppUtils.mLocation!!.accuracy <= Pref.gpsAccuracy.toInt()) {
                         if (AppUtils.mLocation!!.accuracy <= Pref.shopLocAccuracy.toFloat()) {
+                            //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                            Timber.d("------enter to near by shoplist DD------")
+                            //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                             getNearyShopListDD(AppUtils.mLocation!!)
                         } else {
                             //getDDList(AppUtils.mLocation!!)
@@ -1409,6 +1443,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     shopLocation.longitude = shopLong
                     //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
                     val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, Pref.DistributorGPSAccuracy.toInt())
+                    //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                    Timber.d("------isShopNearby avalibale------{$isShopNearby}")
+                    //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                     var dist=location.distanceTo(shopLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(shopLocation)) < nearBy) {
@@ -1447,6 +1484,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, Pref.DistributorGPSAccuracy.toInt())
                     var dist=location.distanceTo(ddLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
+                        //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                        Timber.d("------isShopNearby avalibale allDD------{$isShopNearby}")
+                        //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                         if ((location.distanceTo(ddLocation)) < nearBy) {
                             nearBy = location.distanceTo(ddLocation).toDouble()
                             finalNearByDD = newDDList[i]
@@ -1587,6 +1627,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.tv_attendance_submit -> {
+                //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                Timber.d("------enter attendance to onClick------")
+                //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                 AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
                 if(Pref.IsShowDayStart){
                     getLocforStart()
@@ -2045,10 +2088,16 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
 
     private fun visibilityCheck() {
+        //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+        Timber.d("------enter to visibilityCheck ------")
+        //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
         // 4.0 AddAttendanceFragment AppV 4.0.8 Suman    07/04/2023 Attendance beat selection validation updation mantis 0025782
         var isBeatPresent = false
         if(Pref.IsBeatRouteAvailableinAttendance){
             val bList = AppDatabase.getDBInstance()?.beatDao()?.getAll() as ArrayList<BeatEntity>
+            //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+            Timber.d("------IsBeatRouteAvailableinAttendance ${Pref.IsBeatRouteAvailableinAttendance}------")
+            //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
             if (bList != null && bList.isNotEmpty()){
                 isBeatPresent = true
             }else{
@@ -2198,7 +2247,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         Pref.isAddAttendence = true
         (mContext as DashboardActivity).showSnackMessage("Attendance added successfully")
         (mContext as DashboardActivity).onBackPressed()*/
-
+        //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+        Timber.d("------checkNetworkConnectivity------")
+        //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
         if (AppUtils.isOnline(mContext)) {
             if (BaseActivity.isApiInitiated)
                 return
@@ -2262,6 +2313,10 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     }
 
     private fun showSelfieDialog() {
+        //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+        Timber.d("------showSelfieDialog ------")
+        //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+
         selfieDialog = SelfieDialog.getInstance({
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 initPermissionCheck()
@@ -2274,6 +2329,18 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
     private var permissionUtils: PermissionUtils? = null
     private fun initPermissionCheck() {
+//begin mantis id 26741 Storage permission updation Suman 22-08-2023
+        var permissionList = arrayOf<String>( Manifest.permission.CAMERA)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permissionList += Manifest.permission.READ_MEDIA_IMAGES
+            permissionList += Manifest.permission.READ_MEDIA_AUDIO
+            permissionList += Manifest.permission.READ_MEDIA_VIDEO
+        }else{
+            permissionList += Manifest.permission.WRITE_EXTERNAL_STORAGE
+            permissionList += Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+//end mantis id 26741 Storage permission updation Suman 22-08-2023
         permissionUtils = PermissionUtils(mContext as Activity, object : PermissionUtils.OnPermissionListener {
             override fun onPermissionGranted() {
                 //showPictureDialog()
@@ -2283,8 +2350,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             override fun onPermissionNotGranted() {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.accept_permission))
             }
+            // mantis id 26741 Storage permission updation Suman 22-08-2023
+        },permissionList) //arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
 
-        }, arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
     fun onRequestPermission(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -2343,6 +2411,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     }
 
     private fun showFingerPrintDialog() {
+        Timber.d("------showFingerPrintDialog ------")
         (mContext as DashboardActivity).checkForFingerPrint()
 
         fingerprintDialog = FingerprintDialog()
@@ -2798,6 +2867,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         //(mContext as DashboardActivity).showSnackMessage("prepareAddAttendanceInputParams")
         //Toast.makeText(mContext,"prepareAddAttendanceInputParams",Toast.LENGTH_SHORT).show()
         try {
+            //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+            Timber.d("------prepareAddAttendanceInputParams------")
+            //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
             addAttendenceModel.session_token = Pref.session_token!!
             addAttendenceModel.user_id = Pref.user_id!!
             addAttendenceModel.is_on_leave = isOnLeave.toString()
@@ -2915,11 +2987,17 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
         } catch (e: Exception) {
             e.printStackTrace()
+            //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+            Timber.d("------prepareAddAttendanceInputParams error{$e}------")
+            //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
         }
     }
 
     // 1.0 AddAttendanceFragment AppV 4.0.6 25615 mantis
     private fun checkDDwiseNearbyShopAvaliable() {
+        //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+        Timber.d("------checkDDwiseNearbyShopAvaliable ------")
+        //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
         val currentLocation = Location("")
         currentLocation.latitude = Pref.current_latitude.toDouble()
         currentLocation.longitude = Pref.current_longitude.toDouble()
@@ -2938,6 +3016,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     ddLocation.longitude = ddLong
                     //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
                     val isDDNearby = FTStorageUtils.checkShopPositionWithinRadious(currentLocation, ddLocation,Pref.DistributorGPSAccuracy.toInt())
+                    //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                    Timber.d("------isDDNearby {$isDDNearby}------")
+                    //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                     if (isDDNearby) {
                         isDiswiseNearBYshopVisit = "Yes"
                         break
@@ -2952,10 +3033,19 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
 
     private fun doAttendanceViaApiOrPlanScreen() {
+        //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+        Timber.d("------doAttendanceViaApiOrPlanScreen ------")
+        //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
         if (!willShowUpdateDayPlan) {
 
             if (!isOnLeave) {
+                //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                Timber.d("------isOnLeave {$isOnLeave}------")
+                //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                 if (Pref.isFingerPrintMandatoryForAttendance) {
+                    //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                    Timber.d("------isFingerPrintMandatoryForAttendance {${Pref.isFingerPrintMandatoryForAttendance}------")
+                    //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                     if ((mContext as DashboardActivity).isFingerPrintSupported)
                         showFingerPrintDialog()
                     else {
@@ -2973,46 +3063,25 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
         } else {
             if (!isOnLeave) {
+                //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                Timber.d("------isOnLeave {$isOnLeave}------")
+                //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                 AppUtils.isFromAttendance = true
                 (mContext as DashboardActivity).isDailyPlanFromAlarm = false
                 BaseActivity.isApiInitiated = false
                 (mContext as DashboardActivity).loadFragment(FragType.DailyPlanListFragment, true, addAttendenceModel)
-            } else
+            } else {
+                //start Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
+                Timber.d("------callAddAttendanceApi before------")
+                //end Rev 11.0	AddAttendanceFragment AppV 4.1.3 Saheli    10/07/2023  0026539: log update in attendance module
                 callAddAttendanceApi(addAttendenceModel)
+            }
         }
     }
 
     @SuppressLint("NewApi")
     private fun callAddAttendanceApi(addAttendenceModel: AddAttendenceInpuModel) {
         Timber.e("==========AddAttendance=============")
-    /*    Timber.d("=====AddAttendance Input Params========")
-        Timber.d("session_token-----> " + addAttendenceModel.session_token)
-        Timber.d("user_id----------> " + addAttendenceModel.user_id)
-        Timber.d("is_on_leave----------> " + addAttendenceModel.is_on_leave)
-        Timber.d("work_lat----------> " + addAttendenceModel.work_lat)
-        Timber.d("work_long----------> " + addAttendenceModel.work_long)
-        Timber.d("work_address----------> " + addAttendenceModel.work_address)
-        Timber.d("work_type----------> " + addAttendenceModel.work_type)
-        Timber.d("route----------> " + addAttendenceModel.route)
-        Timber.d("leave_from_date----------> " + addAttendenceModel.leave_from_date)
-        Timber.d("leave_to_date----------> " + addAttendenceModel.leave_to_date)
-        Timber.d("leave_type----------> " + addAttendenceModel.leave_type)
-        Timber.d("leave_reason----------> " + addAttendenceModel.leave_reason)
-        Timber.d("work_date_time----------> " + addAttendenceModel.work_date_time)
-        Timber.d("add_attendence_time----------> " + addAttendenceModel.add_attendence_time)
-        Timber.d("order taken----------> " + addAttendenceModel.order_taken)
-        Timber.d("collection taken----------> " + addAttendenceModel.collection_taken)
-        Timber.d("visit new shop----------> " + addAttendenceModel.new_shop_visit)
-        Timber.d("revisit shop----------> " + addAttendenceModel.revisit_shop)
-        Timber.d("state id----------> " + addAttendenceModel.state_id)
-        Timber.d("shop_list size----------> " + addAttendenceModel.shop_list.size)
-        Timber.d("primary_value_list size----------> " + addAttendenceModel.primary_value_list.size)
-        Timber.d("update_plan_list size----------> " + addAttendenceModel.update_plan_list.size)
-        Timber.d("from_id----------> " + addAttendenceModel.from_id)
-        Timber.d("to_id----------> " + addAttendenceModel.to_id)
-        Timber.d("distance----------> " + addAttendenceModel.distance)
-        Timber.d("======End AddAttendance Input Params======")*/
-
         Timber.d("=====AddAttendance Input Params========")
         Timber.d("session_token-----> " + addAttendenceModel.session_token)
         Timber.d("user_id----------> " + addAttendenceModel.user_id)

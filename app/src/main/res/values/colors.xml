@@ -51,6 +51,7 @@
 
     <color name="white_50">#88ffffff</color>
     <color name="black_50">#88000000</color>
+    <color name="black_51">#A9000000</color>
     <color name="gray_50">#88888888</color>
     <color name="gray_50_dark">#B3292929</color>
 
@@ -142,5 +143,8 @@
     <color name="color_3">#810a56</color>
     <color name="color_4">#470171</color>
     <color name="color_5">#9e6a1f</color>
+
+    <color name="color_card_back">#F3F3F3</color>
+    <color name="color_card_back_deep">#EDEDED</color>
 
 </resources>

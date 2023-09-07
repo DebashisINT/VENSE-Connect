@@ -3102,6 +3102,22 @@ class AppUtils {
             val differenceInDays = differenceInMillis / (24 * 60 * 60 * 1000)
             return differenceInDays.toString()
         }
+
+        fun getPrevXMonthDate(prevMonthCount:Int):String{
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.MONTH, -prevMonthCount)
+            var agoDate = calendar.time
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            return dateFormat.format(agoDate).toString()
+        }
+
+        fun getDaysAgo(daysAgo: Int): Date {
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
+
+            return calendar.time
+        }
+
     }
 
 }

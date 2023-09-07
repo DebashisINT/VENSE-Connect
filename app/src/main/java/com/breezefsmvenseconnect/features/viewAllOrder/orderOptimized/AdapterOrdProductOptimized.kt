@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmvenseconnect.CustomStatic
 import com.breezefsmvenseconnect.R
+import com.breezefsmvenseconnect.app.AppDatabase
 import com.breezefsmvenseconnect.app.Pref
 import com.breezefsmvenseconnect.app.utils.*
 import com.breezefsmvenseconnect.features.DecimalDigitsInputFilter
@@ -29,9 +30,15 @@ import kotlinx.android.synthetic.main.row_ord_opti_cart_list.view.*
 import kotlinx.android.synthetic.main.row_ord_opti_product_list.view.*
 
 //Rev 1.0  AdapterOrdProductOptimized Suman 20-06-2023 mantis 0026389
-
-class AdapterOrdProductOptimized(val mContext: Context,var proList : ArrayList<ProductQtyRateSubmit>,var finalOrderDataList : ArrayList<FinalOrderData>, var listner :OnProductOptiOnClick):
+//  Rev 2.0  v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
+class AdapterOrdProductOptimized(val mContext: Context,var proList : ArrayList<ProductQtyRateSubmit>,shop_id:String,var finalOrderDataList : ArrayList<FinalOrderData>, var listner :OnProductOptiOnClick):
     RecyclerView.Adapter<AdapterOrdProductOptimized.OrdProductOptimizedViewHolder>(){
+
+    var shopID = ""
+    init {
+        shopID = shop_id
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdProductOptimizedViewHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.row_ord_opti_product_list,parent,false)
@@ -184,6 +191,11 @@ class AdapterOrdProductOptimized(val mContext: Context,var proList : ArrayList<P
                         watt = prooductList.get(adapterPosition).watt
                         product_mrp_show = prooductList.get(adapterPosition).product_mrp_show
                         product_discount_show = changingDisc
+                       // Begin Rev 2.0  v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
+                        Qty_per_Unit= prooductList.get(adapterPosition).Qty_per_Unit
+                        Scheme_Qty= prooductList.get(adapterPosition).Scheme_Qty
+                        Effective_Rate= prooductList.get(adapterPosition).Effective_Rate
+                        // End  Rev 2.0  v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
                     }
                     finalOrderDataList.add(obj)
                     prooductList.get(adapterPosition).submitedQty = obj.qty
@@ -270,6 +282,20 @@ class AdapterOrdProductOptimized(val mContext: Context,var proList : ArrayList<P
                     }
                 }
             })
+
+            //Begin  Rev 2.0  v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
+            val shopType = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopID).type.toString()
+            if(Pref.Show_distributor_scheme_with_Product && shopType =="4"){
+                itemView.tv_row_ord_opti_product_list_qty_per_unit.text = "Qty per Unit\n"+prooductList.get(adapterPosition).Qty_per_Unit.toString()
+                itemView.tv_row_ord_opti_product_list_scheme_qty.text = "Scheme Qty\n"+prooductList.get(adapterPosition).Scheme_Qty.toString()
+                itemView.tv_row_ord_opti_product_list_effective_rate.text = "Effective Rate\n"+prooductList.get(adapterPosition).Effective_Rate.toString()
+                itemView.ll_row_ord_opti_product_list_Show_distributor_scheme_with_Product.visibility = View.VISIBLE
+            }
+            else{
+                itemView.ll_row_ord_opti_product_list_Show_distributor_scheme_with_Product.visibility = View.GONE
+            }
+
+//End  Rev 2.0  v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
 
         }
     }

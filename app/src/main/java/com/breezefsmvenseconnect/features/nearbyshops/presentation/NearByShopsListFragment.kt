@@ -105,6 +105,7 @@ import kotlin.collections.ArrayList
 // 6.0 NearByShopsListFragment AppV 4.0.7 saheli 20-02-2023 voice search mantis 0025683
 // 7.0 NearByShopsListFragment AppV 4.0.7 saheli 21-02-2023 voice search mantis 0025683
 // 8.0 NearByShopsListFragment AppV 4.0.7 saheli 08-06-2023 0026307 mantis  Play store console report issues
+// 9.0 NearByShopsListFragment AppV 4.0.7 Suman 26-06-2023 0026307 mantis  26437
 class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var mNearByShopsListAdapter: NearByShopsListAdapter
@@ -165,7 +166,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-
+        println("fab_check onAttach")
         try {
             beatId = arguments?.getString("beatId").toString()
         }
@@ -177,6 +178,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.fragment_nearby_shops, container, false)
+        println("fab_check onCreateView")
         initView(view)
 //        if (AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().getAll().isEmpty())
 //            callMarketingCategoryListApi()
@@ -354,7 +356,6 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-
     }
 
     override fun updateUI(any: Any) {
@@ -819,6 +820,23 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
         setListVisiBility()
         tv_shop_count.text = "Total " + Pref.shopText + "(s): " + list.size
 
+
+        //Begin 9.0 NearByShopsListFragment AppV 4.0.7 Suman 26-06-2023 0026307 mantis  26437
+        try{
+            //sortAlphabatically()
+            floating_fab.close(true)
+            programFab1.colorNormal = mContext.resources.getColor(R.color.delivery_status_green)
+            programFab2.colorNormal = mContext.resources.getColor(R.color.colorAccent)
+            programFab3.colorNormal = mContext.resources.getColor(R.color.colorAccent)
+            programFab1.setImageResource(R.drawable.ic_tick_float_icon)
+            programFab2.setImageResource(R.drawable.ic_tick_float_icon_gray)
+            programFab3.setImageResource(R.drawable.ic_tick_float_icon_gray)
+            println("fab_check ok")
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            println("fab_check err ${ex.message}")
+        }
+        //ENd of 9.0 NearByShopsListFragment AppV 4.0.7 Suman 26-06-2023 0026307 mantis  26437
 
         mNearByShopsListAdapter = NearByShopsListAdapter(this.mContext!!, list, object : NearByShopsListClickListener {
 

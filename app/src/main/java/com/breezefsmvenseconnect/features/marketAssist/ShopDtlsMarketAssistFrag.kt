@@ -393,7 +393,7 @@ class ShopDtlsMarketAssistFrag : BaseFragment(), View.OnClickListener, OnMapRead
                 }
                 uiThread {
                     if(suggestProductL.size>0){
-                        rvProductSuggest.adapter = AdapterSuggestiveProduct(mContext, finalSuggestProductList)
+                        rvProductSuggest.adapter = AdapterSuggestiveProduct(mContext,finalSuggestProductList )
                         cvSuggestProdRoot.visibility = View.VISIBLE
                     }else{
                         cvSuggestProdRoot.visibility = View.GONE
@@ -417,15 +417,8 @@ class ShopDtlsMarketAssistFrag : BaseFragment(), View.OnClickListener, OnMapRead
                     var productOccuranceL: ArrayList<ProductOccur> = ArrayList()
                     for (i in 0..suggestProductLDistinctId.size - 1) {
                         var proID = suggestProductLDistinctId.get(i).product_id
-                        var totalQty = suggestProductL.filter { it.product_id.equals(proID) }
-                            .map { it.qty.toDouble() }.sum()
-                        productOccuranceL.add(
-                            ProductOccur(
-                                proID,
-                                suggestProductL.count { it.product_id == proID },
-                                totalQty.toString()
-                            )
-                        )
+                        var totalQty = suggestProductL.filter { it.product_id.equals(proID) }.map { it.qty.toDouble() }.sum()
+                        productOccuranceL.add(ProductOccur(proID, suggestProductL.count { it.product_id == proID }, totalQty.toString()))
                     }
                     var sortedL = ArrayList(productOccuranceL).sortedWith(compareBy { it.totalQty.toDouble() }).reversed().reversed()
                     productOccuranceL.clear()
@@ -433,8 +426,7 @@ class ShopDtlsMarketAssistFrag : BaseFragment(), View.OnClickListener, OnMapRead
 
                     for (i in 0..productOccuranceL.size - 1) {
                         println("tag_ma $i")
-                        var objL =
-                            suggestProductL.filter { it.product_id.equals(productOccuranceL.get(i).product_id) } as ArrayList<SuggestiveProduct>
+                        var objL = suggestProductL.filter { it.product_id.equals(productOccuranceL.get(i).product_id) } as ArrayList<SuggestiveProduct>
                         var totalOrdValue = 0.0
                         var totalOrdQty = 0.0
                         for (j in 0..objL.size - 1) {

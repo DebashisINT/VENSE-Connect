@@ -52,11 +52,25 @@
                             android:gravity="center"
                             android:paddingStart="@dimen/_20sdp">
 
-                            <ImageView
-                                android:layout_width="@dimen/_22sdp"
-                                android:layout_height="@dimen/_22sdp"
-                                android:src="@drawable/icon_rupee_gold"
-                                android:layout_marginRight="@dimen/_5sdp"/>
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="@dimen/_27sdp"
+                                android:layout_height="@dimen/_27sdp"
+                                app:cardCornerRadius="250dp"
+                                android:layout_gravity="center|top"
+                                app:cardElevation="@dimen/_3sdp"
+                                app:cardBackgroundColor="@color/smoke_white"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_3sdp"
+                                android:foreground="@drawable/round_ripple_back">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_rupee_icon"
+                                    android:padding="@dimen/_5sdp" />
+
+                            </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:id="@+id/tv_frag_shop_dtls_avg_ord_amt"
@@ -114,8 +128,8 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/icon_rupee_1"
-                                        android:padding="@dimen/_5sdp"/>
+                                        android:src="@drawable/ic_ind_rupee"
+                                        android:padding="@dimen/_5sdp" />
 
                                 </androidx.cardview.widget.CardView>
 
@@ -186,7 +200,7 @@
                                                         android:text="Most Purchased"
                                                         android:textSize="@dimen/_10sdp"
                                                         android:textStyle="bold"
-                                                        android:textColor="@color/green"
+                                                        android:textColor="@color/black"
                                                         android:gravity="center"/>
 
                                                     <LinearLayout
@@ -214,8 +228,7 @@
                                                             android:maxLines="2"
                                                             android:text="Product Name"
                                                             android:textStyle="bold"
-
-                                                            android:textColor="@color/completed_green"
+                                                            android:textColor="@color/black"
                                                             android:textSize="@dimen/_11sdp" />
 
                                                         <LinearLayout
@@ -230,14 +243,15 @@
                                                                 android:layout_gravity="center"
                                                                 app:cardCornerRadius="@dimen/_20sdp"
                                                                 app:cardElevation="@dimen/_3sdp"
-                                                                app:cardBackgroundColor="@color/transparent"
+                                                                app:cardBackgroundColor="@color/smoke_white"
                                                                 android:foreground="@drawable/round_ripple_back2">
 
                                                                 <ImageView
-                                                                    android:layout_width="@dimen/_17sdp"
-                                                                    android:layout_height="@dimen/_17sdp"
-                                                                    android:src="@drawable/icon_rupee_1"
-                                                                    android:layout_gravity="center"/>
+                                                                    android:layout_width="@dimen/_19sdp"
+                                                                    android:layout_height="@dimen/_19sdp"
+                                                                    android:src="@drawable/ic_ind_rupee"
+                                                                    android:layout_gravity="center"
+                                                                    android:padding="@dimen/_3sdp" />
 
                                                             </androidx.cardview.widget.CardView>
 
@@ -254,7 +268,7 @@
                                                                     android:text="Total Value"
                                                                     android:gravity="center|start"
                                                                     android:singleLine="true"
-                                                                    android:textColor="@color/completed_green"
+                                                                    android:textColor="@color/black"
                                                                     android:textSize="@dimen/_11sdp"
                                                                     android:textStyle="bold"/>
 
@@ -295,7 +309,7 @@
                                                         android:layout_height="match_parent"
                                                         android:gravity="center"
                                                         android:text="Least Purchased"
-                                                        android:textColor="@color/deep_maroon"
+                                                        android:textColor="@color/black"
                                                         android:textSize="@dimen/_10sdp"
                                                         android:textStyle="bold" />
 
@@ -304,7 +318,7 @@
                                                         android:layout_height="match_parent"
                                                         android:layout_weight="1"
                                                         android:orientation="vertical"
-                                                        android:layout_marginLeft="@dimen/_10sdp">
+                                                        android:layout_marginLeft="@dimen/_5sdp">
 
                                                         <!--android:scrollbars="vertical"
                                                         android:scrollHorizontally="true"
@@ -325,7 +339,7 @@
                                                             android:text="Product Name"
                                                             android:textStyle="bold"
 
-                                                            android:textColor="@color/red"
+                                                            android:textColor="@color/black"
                                                             android:textSize="@dimen/_11sdp" />
 
                                                         <LinearLayout
@@ -340,14 +354,15 @@
                                                                 android:layout_gravity="center"
                                                                 app:cardCornerRadius="@dimen/_20sdp"
                                                                 app:cardElevation="@dimen/_3sdp"
-                                                                app:cardBackgroundColor="@color/transparent"
-                                                                android:foreground="@drawable/round_ripple_back3">
+                                                                app:cardBackgroundColor="@color/smoke_white"
+                                                                android:foreground="@drawable/round_ripple_back2">
 
                                                                 <ImageView
-                                                                    android:layout_width="@dimen/_17sdp"
-                                                                    android:layout_height="@dimen/_17sdp"
-                                                                    android:src="@drawable/icon_rupee_1"
-                                                                    android:layout_gravity="center"/>
+                                                                    android:layout_width="@dimen/_19sdp"
+                                                                    android:layout_height="@dimen/_19sdp"
+                                                                    android:src="@drawable/ic_ind_rupee"
+                                                                    android:layout_gravity="center"
+                                                                    android:padding="@dimen/_3sdp" />
 
                                                             </androidx.cardview.widget.CardView>
 
@@ -364,7 +379,7 @@
                                                                     android:text="Total Value"
                                                                     android:gravity="center|start"
                                                                     android:singleLine="true"
-                                                                    android:textColor="@color/red"
+                                                                    android:textColor="@color/black"
                                                                     android:textSize="@dimen/_11sdp"
                                                                     android:textStyle="bold"/>
 
@@ -415,7 +430,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/icon_product_1"
+                                        android:src="@drawable/ic_product"
                                         android:padding="@dimen/_5sdp"/>
 
                                 </androidx.cardview.widget.CardView>
@@ -487,7 +502,7 @@
                                                         android:text="Most Purchased"
                                                         android:textSize="@dimen/_10sdp"
                                                         android:textStyle="bold"
-                                                        android:textColor="@color/green"
+                                                        android:textColor="@color/black"
                                                         android:gravity="center"/>
 
                                                     <LinearLayout
@@ -516,7 +531,7 @@
                                                             android:text="Product Name"
                                                             android:textStyle="bold"
 
-                                                            android:textColor="@color/completed_green"
+                                                            android:textColor="@color/black"
                                                             android:textSize="@dimen/_11sdp" />
 
                                                         <LinearLayout
@@ -531,14 +546,16 @@
                                                                 android:layout_gravity="center"
                                                                 app:cardCornerRadius="@dimen/_20sdp"
                                                                 app:cardElevation="@dimen/_3sdp"
-                                                                app:cardBackgroundColor="@color/transparent"
+                                                                android:layout_marginLeft="@dimen/_3sdp"
+                                                                app:cardBackgroundColor="@color/smoke_white"
                                                                 android:foreground="@drawable/round_ripple_back2">
 
                                                                 <ImageView
-                                                                    android:layout_width="@dimen/_17sdp"
-                                                                    android:layout_height="@dimen/_17sdp"
-                                                                    android:src="@drawable/icon_product_1"
-                                                                    android:layout_gravity="center"/>
+                                                                    android:layout_width="@dimen/_19sdp"
+                                                                    android:layout_height="@dimen/_19sdp"
+                                                                    android:src="@drawable/ic_product"
+                                                                    android:layout_gravity="center"
+                                                                    android:padding="@dimen/_3sdp" />
 
                                                             </androidx.cardview.widget.CardView>
 
@@ -555,7 +572,7 @@
                                                                     android:text="Total Quantity"
                                                                     android:gravity="center|start"
                                                                     android:singleLine="true"
-                                                                    android:textColor="@color/completed_green"
+                                                                    android:textColor="@color/black"
                                                                     android:textSize="@dimen/_11sdp"
                                                                     android:textStyle="bold"/>
 
@@ -598,7 +615,7 @@
                                                         android:text="Least Purchased"
                                                         android:textSize="@dimen/_10sdp"
                                                         android:textStyle="bold"
-                                                        android:textColor="@color/deep_maroon"
+                                                        android:textColor="@color/black"
                                                         android:gravity="center"/>
 
                                                     <LinearLayout
@@ -606,7 +623,7 @@
                                                         android:layout_height="match_parent"
                                                         android:layout_weight="1"
                                                         android:orientation="vertical"
-                                                        android:layout_marginLeft="@dimen/_10sdp">
+                                                        android:layout_marginLeft="@dimen/_5sdp">
 
                                                         <!--android:scrollbars="vertical"
                                                         android:scrollHorizontally="true"
@@ -627,7 +644,7 @@
                                                             android:text="Product Name"
                                                             android:textStyle="bold"
 
-                                                            android:textColor="@color/red"
+                                                            android:textColor="@color/black"
                                                             android:textSize="@dimen/_11sdp" />
 
                                                         <LinearLayout
@@ -642,14 +659,15 @@
                                                                 android:layout_gravity="center"
                                                                 app:cardCornerRadius="@dimen/_20sdp"
                                                                 app:cardElevation="@dimen/_3sdp"
-                                                                app:cardBackgroundColor="@color/transparent"
-                                                                android:foreground="@drawable/round_ripple_back3">
+                                                                app:cardBackgroundColor="@color/smoke_white"
+                                                                android:foreground="@drawable/round_ripple_back2">
 
                                                                 <ImageView
-                                                                    android:layout_width="@dimen/_17sdp"
-                                                                    android:layout_height="@dimen/_17sdp"
-                                                                    android:src="@drawable/icon_product_1"
-                                                                    android:layout_gravity="center"/>
+                                                                    android:layout_width="@dimen/_19sdp"
+                                                                    android:layout_height="@dimen/_19sdp"
+                                                                    android:src="@drawable/ic_product"
+                                                                    android:layout_gravity="center"
+                                                                    android:padding="@dimen/_3sdp" />
 
                                                             </androidx.cardview.widget.CardView>
 
@@ -666,7 +684,7 @@
                                                                     android:text="Total Quantity"
                                                                     android:gravity="center|start"
                                                                     android:singleLine="true"
-                                                                    android:textColor="@color/red"
+                                                                    android:textColor="@color/black"
                                                                     android:textSize="@dimen/_11sdp"
                                                                     android:textStyle="bold"/>
 
@@ -769,7 +787,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_weight="1.1"
-                                            android:text="Last VIsit"
+                                            android:text="Last Visit"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/_10sdp"
                                             android:textStyle="bold"
@@ -1736,7 +1754,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_15sdp"
-                                android:text="(Derived from Recent 30 orders)"
+                                android:text="(Derived from Recent 30 orders on Qty)"
                                 android:gravity="center|top"
                                 android:textColor="@color/date_bg_selected_color"
                                 android:textSize="@dimen/_11sdp" />

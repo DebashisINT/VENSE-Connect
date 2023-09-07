@@ -192,7 +192,11 @@ class GeofenceService : Service(), OnCompleteListener<Void> {
     private fun removeGeofence() {
         Timber.d("removeGeofence : ")
         Pref.isGeoFenceAdded = false
-        mGeofencingClient.removeGeofences(getGeofencePendingIntent())
+        try{
+            mGeofencingClient.removeGeofences(getGeofencePendingIntent())
+        }catch (ex:Exception){
+            Timber.d("removeGeofence : ${ex.message}")
+        }
     }
 
 }

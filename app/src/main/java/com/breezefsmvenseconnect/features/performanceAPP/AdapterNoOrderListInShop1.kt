@@ -39,28 +39,34 @@ class AdapterNoOrderListInShop1(var mContext: Context, var mList:ArrayList<Strin
 
             var shopDtlsObj =  AppDatabase.getDBInstance()?.addShopEntryDao()?.getCustomShopDtls(mList.get(adapterPosition).toString())
 
+            try{
+                itemView.tv_row_shop_list_ma_name.text = shopDtlsObj!!.shop_name.get(0).toString()
+                itemView.tv_row_shop_name.text = shopDtlsObj!!.shop_name
+                itemView.tv_row_shop_phone_number.text = shopDtlsObj!!.owner_contact_number
+                itemView.tv_row_shop_list_ma_addr1.text = shopDtlsObj!!.address
 
+            }catch (ex:Exception){
+                itemView.tv_row_shop_list_ma_name.text = "X"
+                itemView.tv_row_shop_name.text = ""
+                itemView.tv_row_shop_phone_number.text = ""
+                itemView.tv_row_shop_list_ma_addr1.text = ""
 
-            itemView.tv_row_shop_list_ma_name.text = shopDtlsObj!!.shop_name.get(0).toString()
-            itemView.tv_row_shop_name.text = shopDtlsObj!!.shop_name
-            itemView.tv_row_shop_phone_number.text = shopDtlsObj!!.owner_contact_number
-            itemView.tv_row_shop_list_ma_addr1.text = shopDtlsObj!!.address
-
+            }
 
             itemView.tv_row_shop_phone_number.setOnClickListener {
-                IntentActionable.initiatePhoneCall(mContext, shopDtlsObj.owner_contact_number)
+                IntentActionable.initiatePhoneCall(mContext, shopDtlsObj!!.owner_contact_number)
             }
 
             try{
-                var typeName = AppDatabase.getDBInstance()?.shopTypeDao()?.getSingleType(shopDtlsObj.type)!!.shoptype_name
+                var typeName = AppDatabase.getDBInstance()?.shopTypeDao()?.getSingleType(shopDtlsObj!!.type)!!.shoptype_name
                 itemView.tv_row_shop_list_shop_type1.text =typeName
             }catch (ex:Exception){
                 itemView.tv_row_shop_list_shop_type1.text ="N/A"
             }
 
             try{
-                if(!shopDtlsObj.owner_name.equals("")){
-                    itemView.tv_row_shop_list_ma_shop_catagory_retailer1.text = shopDtlsObj.owner_name
+                if(!shopDtlsObj!!.owner_name.equals("")){
+                    itemView.tv_row_shop_list_ma_shop_catagory_retailer1.text = shopDtlsObj!!.owner_name
                 }
                 else{
                     itemView.tv_row_shop_list_ma_shop_catagory_retailer1.text = "N/A"
@@ -71,7 +77,7 @@ class AdapterNoOrderListInShop1(var mContext: Context, var mList:ArrayList<Strin
             }
 
             try{
-                itemView.tv_row_shop_list_ma_shop_count.text = shopDtlsObj.age_since_party_creation_count.toDouble().toInt().toString()
+                itemView.tv_row_shop_list_ma_shop_count.text = shopDtlsObj!!.age_since_party_creation_count.toDouble().toInt().toString()
             }catch (ex:Exception){
                 itemView.tv_row_shop_list_ma_shop_count.text =  "N/A"
             }

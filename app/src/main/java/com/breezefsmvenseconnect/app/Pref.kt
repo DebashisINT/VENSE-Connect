@@ -17,6 +17,10 @@ import com.marcinmoskala.kotlinpreferences.PreferenceHolder
 // Rev 9.0 Pref AppV 4.0.8 Saheli    12/05/2023  mantis 0026101
 // Rev 10.0 Pref AppV 4.0.8 Suman    16/05/2023  mantis 26119
 // Rev 11.0 Pref AppV 4.0.8 Suman    19/05/2023  mantis 26163
+// 12.0 Pref v 4.1.6 Tufan 11/07/2023 mantis 26546 revisit sync time
+// 13.0 Pref v 4.1.6 Suman 13/07/2023 mantis 26555 Usersettings
+// 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+// 15.0 Pref v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
 object Pref : PreferenceHolder() {
     var text: String? by bindToPreferenceFieldNullable()
     var num: Int by bindToPreferenceField(0, "SomeIntKey")
@@ -917,11 +921,31 @@ object Pref : PreferenceHolder() {
     var IsUpdateVisitDataInTodayTable : Boolean by bindToPreferenceField(false, "IsUpdateVisitDataInTodayTable")
 
     //Begin Rev 12.0 Pref AppV 4.1.6 Saheli    20/06/2023  mantis 0026391
-    var isNewOptimizedStock : Boolean by bindToPreferenceField(false, "isNewOptimizedStock")
+    var isNewOptimizedStock : Boolean by bindToPreferenceField(true, "isNewOptimizedStock")
     var savefromOrderOrStock : Boolean by bindToPreferenceField(true, "savefromOrderOrStock")
     //end Rev 12.0 Pref AppV 4.1.6 Saheli    20/06/2023  mantis 0026391
 
+    //Begin 12.0 Pref v 4.1.6 Tufan 11/07/2023 mantis 26546 revisit sync time
+    var ShopSyncIntervalInMinutes: String by bindToPreferenceField("10", "ShopSyncIntervalInMinutes")
+    //End 12.0 Pref v 4.1.6 Tufan 11/07/2023 mantis 26546 revisit sync time
+
+    //Begin 13.0 Pref v 4.1.6 Suman 13/07/2023 mantis 26555 Usersettings
+    var IsUsbDebuggingRestricted : Boolean by bindToPreferenceField(false, "IsUsbDebuggingRestricted")
+    //End 13.0 Pref v 4.1.6 Suman 13/07/2023 mantis 26555 Usersettings
+
+    var IsShowWhatsAppIconforVisit : Boolean by bindToPreferenceField(false, "IsShowWhatsAppIconforVisit")
+    var IsAutomatedWhatsAppSendforRevisit : Boolean by bindToPreferenceField(false, "IsAutomatedWhatsAppSendforRevisit")
+
+    var UserLoginContactID : String by bindToPreferenceField("", "UserLoginContactID")
+
+    //Begin 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+    var Order_Past_Days: String by bindToPreferenceField("10", "Order_Past_Days")
+    var IsAllowBackdatedOrderEntry : Boolean by bindToPreferenceField(false, "IsAllowBackdatedOrderEntry")
+  //End 14.0 Pref v 4.1.6 Tufan 11/08/2023 mantis 26655 Order Past Days
+
+    //Begin 15.0 Pref v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
+  var Show_distributor_scheme_with_Product : Boolean by bindToPreferenceField(false, "Show_distributor_scheme_with_Product")
+    //end 15.0 Pref v 4.1.6 Tufan 22/08/2023 mantis 26649 Show distributor scheme with Product
+
 }
-
-
 
